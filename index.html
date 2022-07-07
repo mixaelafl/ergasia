@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="el">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet"
+href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+crossorigin="anonymous">
+    <title>Lottery-Ballot</title>
+</head>
+
+<body style="margin: 2em;">
+
+    <h1><center>Lottery-Ballot</center></h1>
+
+    <hr>
+
+    <form id="contract-form">
+
+
+        <div align="middle"; class="form-group">
+            
+            <label>CAR</label> 
+            <button type="submit" class="btn btn-primary" value="0" id="bid">BID</button> 
+            
+            <label>phone</label> 
+            <button type="submit" class="btn btn-primary" value="1" id="bid">BID</button>
+            
+            <label>pc</label> 
+            <button type="submit" class="btn btn-primary" value="2" id="bid">BID</button> 
+        
+        </div>
+
+        <hr>
+
+        <div align="middle"; class="form-group">
+            <label for="Sender Address">Current Account</label>
+            <div id="from-Address">Όταν συνδεθεί το Metamask, εδώ εμφανίζεται η διεύθυνσή σας</div>
+        </div>
+        
+        <div align="middle"; class="form-group">
+            <label for="Receiver Address">Owner Account</label>
+            <input align="middle"; value="" type="text"
+
+            class="form-control" id="toAddress"
+
+             aria-describedby="toAddressHelp" placeholder="Enter the receipient address"
+
+            required="true">
+       
+        </div>
+   
+    </form>
+
+    <hr>
+
+    <div class="Buttons">
+        <form id="Declear">
+            <button type="submit" class="btn btn-primary">Declear Winner</button>
+            <div id="Declear-display">Πατήστε το κουμπί για να ξεκινησει η κληρωση .</div>
+        </form>
+        
+        <form id="Withdraw">
+            <button type="submit" class="btn btn-primary">Withdraw</button>
+            <div id="Withdraw-display">Πατήστε το κουμπί για να τραβηξεις τα λεφτα στο συμβολαιο.</div>
+        </form>
+            
+        <form id="Reveal">
+            <button type="submit" class="btn btn-primary">Reveal</button>
+            <div id="reveal-display">Πατήστε το κουμπί για να δείτε ποσα bids εγιναν για καθε αντικειμενο.</div>
+        </form>
+
+        <form id="Am_i_win">    
+            <button type="submit" class="btn btn-primary">Am I Winner</button>
+            <div id="AMI-display">Πατήστε το κουμπί για να δεις αν εισαι νικητης.</div>
+        </form>
+
+        <form id="Reset">
+            <button type="submit" class="btn btn-primary">Reset</button>
+            <div id="Reset-display">Πατήστε το κουμπί για να ξανα ξεκινησει νεος κυκλος αγορων .</div>
+        </form>
+		
+		<form align="middle" id="get-balance-form">
+			<button type="submit" class="btn btn-primary">Reveal Balance</button>
+			<div id="the-balance">Πατήστε το κουμπί για να δείτε το ποσό που είναι αποταμιευμένο στο συμβόλαιο.</div>
+		</form>
+    </div>
+
+    
+
+    
+    
+
+    <script src="web3.min.js"></script>
+
+    <script src="contractAbi.js"></script>
+    <!-- var abi = [...] -->
+    <script src="contractAbi.js"></script>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous">
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous">
+    </script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous">
+    </script>
+
+    <script>
+        window.addEventListener('load', async () => {
+            if (window.ethereum) 
+            {
+                const web3 = new Web3(window.ethereum);
+                try 
+                {
+                    // Request account access if needed
+                    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+
+                    // Acccounts now exposed
+                } 
+                catch (error) 
+                {
+                    console.error(error);
+                }
+                // Legacy dapp browsers...
+            }
+        });
+
+        if (typeof web3 != 'undefined') 
+        {
+            web3 = new Web3(web3.currentProvider);
+        }
+
+        var fromAddress;
+        web3.eth.getAccounts((error, accounts) => {
+            if (error) 
+            {
+                console.log('error:' + error);
+                return;
+            } 
+            else   
+            {
+                fromAddress = accounts[0];
+                $('#from-Address').html('<b>' + fromAddress + '</b>');
+            }
+        });
+
+        if (window.ethereum) 
+        {
+            window.ethereum.on('accountsChanged', (accounts) => {
+                web3.eth.getAccounts((error, accounts) => {
+                    if (error) 
+                    {
+                        console.log('error:' + error);
+                        return;
+                    }
+                    else 
+                    {
+                        fromAddress = accounts[0];
+                        $('#from-Address').html('<b>' + fromAddress + '</b>');
+                    }
+                });
+            });
+        }
+
+        //change this to the ACTUAL contract address that you created on truffle migrate
+        var contractAddress = "0x56D8Ea85A21C4D35a7318dcDD925BF972A0F74F5";
+        var LotteryContract = new web3.eth.Contract(abi, contractAddress);
+        var result;
+
+
+        
+    </script>
+</body>
+</html>
